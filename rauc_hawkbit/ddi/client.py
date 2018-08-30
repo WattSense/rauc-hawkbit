@@ -49,7 +49,7 @@ class DDIClient(object):
         self.host = host
         self.ssl = ssl
         self.logger = logging.getLogger('rauc_hawkbit')
-        self.headers = {'Authorization': 'TargetToken {}'.format(auth_token)}
+        self.headers = {'Authorization': 'GatewayToken {}'.format(auth_token)}
         self.tenant = tenant_id
         self.controller_id = controller_id
         self.timeout = timeout
