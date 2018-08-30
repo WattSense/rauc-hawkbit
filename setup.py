@@ -14,7 +14,7 @@ setup(
       setup_requires=['setuptools_scm'],
       install_requires=[
           'aiohttp>=2.0.0',
-          'gbulb>=0.5',
+          'txdbus>=1.1.0',
 		  'async-timeout>=3.0.0',
       ],
       packages=find_packages(),

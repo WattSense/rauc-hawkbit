@@ -3,7 +3,8 @@
 
 import asyncio
 import aiohttp
-import gbulb
+# TODO DBUS
+import txdbus
 from configparser import ConfigParser
 from pathlib import Path
 import os
@@ -84,6 +85,6 @@ async def main():
 
 if __name__ == '__main__':
     # create event loop, open aiohttp client session and start polling
-    gbulb.install()
+    # TODO DBUS loop ... ?
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())

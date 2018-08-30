@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import asyncio
-from gi.repository import Gio
 import logging
 import traceback
 
@@ -13,7 +12,7 @@ class DBUSException(Exception):
 class AsyncDBUSClient(object):
     def __init__(self):
         self.logger = logging.getLogger('rauc_hawkbit')
-        self.dbus_events = asyncio.Queue()
+        # self.dbus_events = asyncio.Queue()  # TODO DBUS
         loop = asyncio.get_event_loop()
         # handle dbus events in async way
         self.dbus_event_task = loop.create_task(self.handle_dbus_event())
@@ -24,12 +23,13 @@ class AsyncDBUSClient(object):
         # ({interface}, {property}): {callback}
         self.property_callbacks = {}
 
-        self.system_bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        #self.system_bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None) # TODO DBUS
 
         # always subscribe to property changes by default
-        self.new_signal_subscription('org.freedesktop.DBus.Properties',
-                                     'PropertiesChanged',
-                                     self.property_changed_callback)
+		# TODO DBUS
+        #self.new_signal_subscription('org.freedesktop.DBus.Properties',
+        #                             'PropertiesChanged',
+        #                             self.property_changed_callback)
 
     def __del__(self):
         self.cleanup_dbus()
@@ -43,35 +43,39 @@ class AsyncDBUSClient(object):
 
     def on_dbus_event(self, *args):
         """Generic sync callback for all DBUS events."""
-        self.dbus_events.put_nowait(args)
+		# TODO DBUS
+        #self.dbus_events.put_nowait(args)
 
     async def handle_dbus_event(self):
         """
         Retrieves DBUS events from queue and calls corresponding async
         callback.
         """
-        while True:
-            try:
-                event = await self.dbus_events.get()
-                interface = event[3]
-                signal = event[4]
-                await self.signal_callbacks[(interface, signal)](*event)
-            except Exception as e:
-                traceback.print_exc()
-                self.logger.error(str(e))
+        # TODO DBUS
+        #while True:
+        #    try:
+        #        event = await self.dbus_events.get()
+        #        interface = event[3]
+        #        signal = event[4]
+        #        await self.signal_callbacks[(interface, signal)](*event)
+        #    except Exception as e:
+        #        traceback.print_exc()
+        #        self.logger.error(str(e))
 
     def new_proxy(self, interface, object_path):
         """Returns a new managed proxy."""
         # assume name is interface without last part
-        name = '.'.join(interface.split('.')[:-1])
-        proxy = Gio.DBusProxy.new_sync(self.system_bus, 0, None, name,
-                                       object_path, interface, None)
+		# TODO DBUS
+        #name = '.'.join(interface.split('.')[:-1])
+        #proxy = Gio.DBusProxy.new_sync(self.system_bus, 0, None, name,
+        #                               object_path, interface, None)
 
         # FIXME: check for methods
-        if len(proxy.get_cached_property_names()) == 0:
-            self.logger.warning('Proxy {} contains no properties')
+        #if len(proxy.get_cached_property_names()) == 0:
+        #    self.logger.warning('Proxy {} contains no properties')
 
-        return proxy
+        #return proxy
+        return 0
 
     def new_signal_subscription(self, interface, signal, callback):
         """Add new signal subscription."""

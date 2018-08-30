@@ -2,7 +2,6 @@
 
 import asyncio
 from aiohttp.client_exceptions import ClientOSError, ClientResponseError
-from gi.repository import GLib
 from datetime import datetime, timedelta
 import os
 import os.path
@@ -44,15 +43,16 @@ class RaucDBUSDDIClient(AsyncDBUSClient):
         self.step_callback = step_callback
 
         # DBUS proxy
-        self.rauc = self.new_proxy('de.pengutronix.rauc.Installer', '/')
+		# TODO DBUS
+        #self.rauc = self.new_proxy('de.pengutronix.rauc.Installer', '/')
 
         # DBUS property/signal subscription
-        self.new_property_subscription('de.pengutronix.rauc.Installer',
-                                       'Progress', self.progress_callback)
-        self.new_property_subscription('de.pengutronix.rauc.Installer',
-                                       'LastError', self.last_error_callback)
-        self.new_signal_subscription('de.pengutronix.rauc.Installer',
-                                     'Completed', self.complete_callback)
+        #self.new_property_subscription('de.pengutronix.rauc.Installer',
+        #                               'Progress', self.progress_callback)
+        #self.new_property_subscription('de.pengutronix.rauc.Installer',
+        #                               'LastError', self.last_error_callback)
+        #self.new_signal_subscription('de.pengutronix.rauc.Installer',
+        #                             'Completed', self.complete_callback)
 
     async def complete_callback(self, connection, sender_name, object_path,
                                 interface_name, signal_name, parameters):
@@ -228,17 +228,19 @@ class RaucDBUSDDIClient(AsyncDBUSClient):
 
         # download successful, start install
         self.logger.info('Starting installation')
-        try:
-            self.action_id = action_id
-            # do not interrupt install call
-            await asyncio.shield(self.install())
-        except GLib.Error as e:
-            # send negative feedback to HawkBit
-            status_execution = DeploymentStatusExecution.closed
-            status_result = DeploymentStatusResult.failure
-            await self.ddi.deploymentBase[action_id].feedback(
-                    status_execution, status_result, [str(e)])
-            raise APIError(str(e))
+		# TODO DBUS
+        #try:
+        #    self.action_id = action_id
+        #    # do not interrupt install call
+        #    await asyncio.shield(self.install())
+        #
+        #except GLib.Error as e:
+        #    # send negative feedback to HawkBit
+        #    status_execution = DeploymentStatusExecution.closed
+        #    status_result = DeploymentStatusResult.failure
+        #    await self.ddi.deploymentBase[action_id].feedback(
+        #            status_execution, status_result, [str(e)])
+        #    raise APIError(str(e))
 
     async def download_artifact(self, action_id, url, md5sum,
                                 tries=3):
