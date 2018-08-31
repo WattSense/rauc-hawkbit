@@ -49,7 +49,7 @@ class DDIClient(object):
         self.host = host
         self.ssl = ssl
         self.logger = logging.getLogger('rauc_hawkbit')
-        self.headers = {'Authorization': 'GatewayToken {}'.format(auth_token)}
+        self.headers = {'Authorization': 'TargetToken {}'.format(auth_token)}
         self.tenant = tenant_id
         self.controller_id = controller_id
         self.timeout = timeout
@@ -137,6 +137,7 @@ class DDIClient(object):
             Expanded API URL with protocol (http/https) and host prepended
         """
         protocol = 'https' if self.ssl else 'http'
+        print('HPA: {}'.format(api_path))
         return '{protocol}://{host}/{api_path}'.format(
             protocol=protocol, host=self.host, api_path=api_path)
 
